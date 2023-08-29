@@ -59,7 +59,8 @@
                 console.log("Book not found.");
             }
         }
-        checkoutBook("978-1250301697"); //
+        checkoutBook("978-1250301697"); //Book "Alex Michaelides" has been checked out.
+        checkoutBook("778-7250301697"); //Book not found.  
 
         // Function to return a book
         function returnBook(isbn) {
@@ -71,8 +72,8 @@
                 console.log("Book not found.");
             }
         }
-        returnBook("978-1250301697");
-        returnBook("134-1250301697");
+        returnBook("978-1250301697"); //Book "Alex Michaelides" has been returned.
+        returnBook("134-1250301697"); //Book not found.
 
         // Function to find books by a specific author
         function findBooksByAuthor(author) {
