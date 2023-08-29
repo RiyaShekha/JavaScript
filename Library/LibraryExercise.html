@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+</head>
+
+<body>
+    <script>
+        const library = [
+            {
+                title: "Where the Crawdads Sing",
+                author: "Delia Owens",
+                isbn: "978-0735219090",
+                checkedOut: false
+            },
+            {
+                title: "The Silent Patient",
+                author: "Alex Michaelides",
+                isbn: "978-1250301697",
+                checkedOut: true
+            },
+            {
+                title: "Educated: A Memoir",
+                author: "Alex Michaelides",
+                isbn: "978-0399590504",
+                checkedOut: false
+            }
+        ];
+        // Function to create a book object
+        function createBook(title, author, isbn) {
+            return {
+                title,
+                author,
+                isbn,
+                checkedOut: false
+            };
+        }
+        const book4 = createBook("Becoming", "Michelle Obama", "978-1524763138");
+        const book5 = createBook("The Tattooist of Auschwitz", " Heather Morris", "978-0062797155");
+
+        // Function to add a book to the library
+        function addBookToLibrary(book) {
+            library.push(book);
+        }
+        addBookToLibrary(book4);
+        addBookToLibrary(book5);
+        
+        console.log(library);
+
+        // Function to checkout a book
+        function checkoutBook(isbn) {
+            const book = library.find(book => book.isbn === isbn);
+            if (book) {
+                book.checkedOut = true;
+                console.log(`Book "${book.title}" has been checked out.`);
+            } else {
+                console.log("Book not found.");
+            }
+        }
+        checkoutBook("978-1250301697"); //
+
+        // Function to return a book
+        function returnBook(isbn) {
+            const book = library.find(book => book.isbn === isbn);
+            if (book) {
+                book.checkedOut = false;
+                console.log(`Book "${book.title}" has been returned.`);
+            } else {
+                console.log("Book not found.");
+            }
+        }
+        returnBook("978-1250301697");
+        returnBook("134-1250301697");
+
+        // Function to find books by a specific author
+        function findBooksByAuthor(author) {
+            return library.filter(book => book.author === author);
+        }
+
+        const booksByAuthor = findBooksByAuthor("Alex Michaelides");
+        console.log("Books by Alex Michaelides:", booksByAuthor);
+    </script>
+</body>
+
+</html>
