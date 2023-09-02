@@ -8,59 +8,135 @@
 
 <body>
     <script>
+        const MAX_CHECKOUTS = 3;
         const library = [
             {
                 title: "Where the Crawdads Sing",
                 author: "Delia Owens",
                 isbn: "978-0735219090",
-                checkedOut: false
+                checkedOut: false,
+                checkoutCount: 0
             },
             {
-                title: "The Silent Patient",
+                title: "The Sit Patient",
                 author: "Alex Michaelides",
-                isbn: "978-1250301697",
-                checkedOut: true
+                isbn: "978-0735219090",
+                checkedOut: true,
+                checkoutCount: 0
             },
             {
                 title: "Educated: A Memoir",
                 author: "Alex Michaelides",
                 isbn: "978-0399590504",
-                checkedOut: false
+                checkedOut: false,
+                checkoutCount: 0
             }
         ];
         // Function to create a book object
         function createBook(title, author, isbn) {
+            if(typeof title != "string" || title == ''){
+                console.log("Please Enter Valid Book Title");
+                return;
+            }
+            if(typeof author != "string" || author == ''){
+                console.log("Please Enter Valid Author");
+                return;
+            }
+            if(typeof isbn != "string" || isbn == '' || isbn.length !== 14){
+                console.log("Please Enter Valid isbn");
+            }
             return {
                 title,
                 author,
                 isbn,
-                checkedOut: false
+                checkedOut: false,
+                checkoutCount: 0
+                
             };
         }
         const book4 = createBook("Becoming", "Michelle Obama", "978-1524763138");
         const book5 = createBook("The Tattooist of Auschwitz", " Heather Morris", "978-0062797155");
+       // const book6 = createBook("Becoming", "Michelle Obama", "978-1524763138");
 
         // Function to add a book to the library
-        function addBookToLibrary(book) {
+        function addBookToLibrary(book) 
+        {
+            if (!isValidBookObject(book))
+            {   
+                console.log("book object is not valid");
+                return false;
+            }
+
+            if (library.includes(book))
+            {
+                console.log("book already exists");
+                return false;
+            }
+
+            if (library.find(libBook => book.isbn == libBook.isbn))
+            {
+                console.log("this is a duplicate book, it is not created using createBook() function");
+                return false;
+            }
+
             library.push(book);
+            return true;
+        }
+
+        function isValidBookObject(book){
+            if (typeof book != 'object') return false;
+            if (book.title === undefined) return false;
+            if (book.author === undefined) return false;
+            if (book.isbn === undefined) return false;
+            if (book.checkedOut === undefined) return false;
+            // if (book.checkoutCount === undefined) return false;
+            // if (book.rating === undefined) return false;
+            
+            return true;
         }
         addBookToLibrary(book4);
         addBookToLibrary(book5);
+       // addBookToLibrary(book6); //this is a duplicate book, it is not created using createBook() function
         
         console.log(library);
 
         // Function to checkout a book
-        function checkoutBook(isbn) {
+        function checkoutBook(isbn) 
+        {
+            if (!isValidIsbn(isbn)){
+                console.log(isbn);
+                console.log("ISBN is not valid");
+                return false;
+            }
+
             const book = library.find(book => book.isbn === isbn);
-            if (book) {
-                book.checkedOut = true;
-                console.log(`Book "${book.title}" has been checked out.`);
-            } else {
-                console.log("Book not found.");
+            if (book) 
+            {
+                if (book.checkoutCount < MAX_CHECKOUTS) {
+                    book.checkedOut = true;
+                    book.checkoutCount++;
+                    console.log(`Book "${book.title}" has been checked out.`);
+                    return true;
+                } else {
+                console.log(`Maximum checkouts reached for "${book.title}"`);
             }
         }
-        checkoutBook("978-1250301697"); //Book "Alex Michaelides" has been checked out.
-        checkoutBook("778-7250301697"); //Book not found.  
+        return false;
+    }
+         checkoutBook("978-0735219090");
+         checkoutBook("978-0735219090");
+         checkoutBook("978-0735219090");
+         checkoutBook("978-0735219090");
+      
+    function isValidIsbn(isbn){
+        if (typeof isbn != "string") 
+            return false;
+
+        if (isbn.length != 14) 
+            return false;
+
+        return true;
+    }
 
         // Function to return a book
         function returnBook(isbn) {
@@ -72,15 +148,16 @@
                 console.log("Book not found.");
             }
         }
-        returnBook("978-1250301697"); //Book "Alex Michaelides" has been returned.
-        returnBook("134-1250301697"); //Book not found.
+        returnBook("978-1250301697");
+        returnBook("134-1250301697");
 
         // Function to find books by a specific author
         function findBooksByAuthor(author) {
+            return library.filter(book => book.author.toLowerCase().includes(author.toLowerCase()));
             return library.filter(book => book.author === author);
         }
 
-        const booksByAuthor = findBooksByAuthor("Alex Michaelides");
+        const booksByAuthor = findBooksByAuthor("Alex");
         console.log("Books by Alex Michaelides:", booksByAuthor);
     </script>
 </body>
