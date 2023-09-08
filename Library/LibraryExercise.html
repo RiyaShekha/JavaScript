@@ -50,7 +50,8 @@
                 author,
                 isbn,
                 checkedOut: false,
-                checkoutCount: 0
+                checkoutCount: 0,
+                dueDate: null
                 
             };
         }
@@ -101,7 +102,7 @@
         console.log(library);
 
         // Function to checkout a book
-        function checkoutBook(isbn) 
+        function checkoutBook(isbn, daysToReturn = 14) 
         {
             if (!isValidIsbn(isbn)){
                 console.log(isbn);
@@ -115,7 +116,10 @@
                 if (book.checkoutCount < MAX_CHECKOUTS) {
                     book.checkedOut = true;
                     book.checkoutCount++;
-                    console.log(`Book "${book.title}" has been checked out.`);
+                    const dueDate = new Date();
+                    dueDate.setDate(dueDate.getDate() + daysToReturn);
+                    book.dueDate = dueDate;
+                    console.log(`this book is checked out: ${book.title} and due date is ${dueDate.toDateString()}.`);
                     return true;
                 } else {
                 console.log(`Maximum checkouts reached for "${book.title}"`);
@@ -123,10 +127,21 @@
         }
         return false;
     }
-         checkoutBook("978-0735219090");
-         checkoutBook("978-0735219090");
-         checkoutBook("978-0735219090");
-         checkoutBook("978-0735219090");
+
+    function listOverdueBooks() {
+    const currentDate = new Date();
+    const overdueBooks = library.filter(book => book.checkedOut && book.dueDate < currentDate);
+    return overdueBooks;
+    }
+
+    console.log("checkoutBook:");
+
+    checkoutBook("978-0735219090");  //this book is checked out: Where the Crawdads Sing and due date is Fri Sep 22 2023.
+    checkoutBook("978-0735219090");  //this book is checked out: Where the Crawdads Sing and due date is Fri Sep 22 2023.
+    checkoutBook("978-0735219090");  //this book is checked out: Where the Crawdads Sing and due date is Fri Sep 22 2023. Maximum checkouts reached for "Where the Crawdads Sing"
+    checkoutBook("978-0735219090");  //Maximum checkouts reached for "Where the Crawdads Sing"
+    checkoutBook("978-0399590504",10); //this book is checked out: Educated: A Memoir and due date is Mon Sep 18 2023.
+    
       
     function isValidIsbn(isbn){
         if (typeof isbn != "string") 
@@ -148,8 +163,8 @@
                 console.log("Book not found.");
             }
         }
-        returnBook("978-1250301697");
-        returnBook("134-1250301697");
+        returnBook("978-1250301697"); //Book not found.
+        returnBook("134-1250301697"); //Book not found.
 
         // Function to find books by a specific author
         function findBooksByAuthor(author) {
